@@ -88,10 +88,10 @@ class K_means:
                 if self.assigned_clusters[i][0] == j:
                     for n in range(len(s)):
                         s[n] += self.data[i][n]
-                        c += 1
+                    c += 1
             for n in range(len(self.cluster_centers[j])):
                 if c > 0:
-                    self.cluster_centers[j][n] = s[n] / c
+                    self.cluster_centers[j][n] = s[n]/c
         self.assign_cluster()
         self.calc_euclidean_distances()
 
@@ -134,7 +134,6 @@ for i in range(len(model.cluster_centers)):
         f.write(''.join(str(round(model.cluster_centers[i][j], 9))))
         f.write(' ')
     f.write('\n')
-    #f.write(''.join(str(x) for x in model.cluster_centers[i]))
 
 
 
