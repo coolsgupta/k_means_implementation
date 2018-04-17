@@ -40,7 +40,7 @@ class K_means:
 
     def assign_cluster(self):
         for i in range(len(self.data)):
-            cluster = np.argmin(self.dist_from_centers)
+            cluster = self.dist_from_centers[i].index(min(self.dist_from_centers[i]))
             self.assigned_clusters.append([cluster, self.cluster_centers[cluster]])
 
 
