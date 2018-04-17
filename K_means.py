@@ -19,7 +19,14 @@ class K_means:
         self.filename = file_name
         # the number of clusters required
         self.K = K
+        # calling pre-process
         self.preprocess_data()
+        # initiating cluster centers
+        self.initial_centers()
+        # finding initial distances
+        self.calc_euclidean_distances()
+        # initial assignment of clusters
+        self.assign_cluster()
 
     # function for pre-processing the data for the model
     def preprocess_data(self):
@@ -71,11 +78,8 @@ class K_means:
 
 
 # main
-
-model = K_means()
-model.initial_centers()
-model.calc_euclidean_distances()
-model.assign_cluster()
+# initializing the model (handles : data pre-processing and initial assignment of clusters)
+model = K_means(argv[1], argv[2])
 for i in range(49):
     print (model.data[i])
     print (model.dist_from_centers[i])
