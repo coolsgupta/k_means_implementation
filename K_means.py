@@ -18,7 +18,13 @@ class K_means:
         # the name of the input file
         self.filename = file_name
         # the number of clusters required
-        self.K = K
+        self.K = np.int(K)
+        # number of data points whose cluster was changed in an iteration
+        self.number_of_changes = len(self.data)
+        # number of iterations
+        self.iteration = 0
+        # maximum number of permitted iterations to avoid infinite loop
+        self.MAX_ITERATIONS = 5
         # calling pre-process
         self.preprocess_data()
         # initiating cluster centers
@@ -58,31 +64,80 @@ class K_means:
     def assign_cluster(self):
         for i in range(len(self.data)):
             cluster = self.dist_from_centers[i].index(min(self.dist_from_centers[i]))
-            self.assigned_clusters.append([cluster, self.cluster_centers[cluster]])
-        self.calc_euclidean_distances()
+            if self.iteration == 0:
+                self.assigned_clusters.append([cluster, self.cluster_centers[cluster]])
+            else:
+                if(self.assigned_clusters[i][0] != cluster):
+                    self.number_of_changes += 1
+                self.assigned_clusters[i] = [cluster, self.cluster_centers[cluster]]
+
 
     # function to find initial cluster centers
     def initial_centers(self):
         for i in range(self.K):
             self.cluster_centers.append(choice(self.data))
 
-    # function to update the position of cluster center once
+    # function to update the position of cluster center once and update the assignment of clusters and the distances respectively
     def update_center(self):
+        self.iteration += 1
+        self.number_of_changes = 0;
         for j in range(self.K):
             s =[0]*len(self.data[0])
+            c = 0;
             for i in range(len(self.data)):
-                if self.assigned_clusters[i] == j:
-                    np.sum(s,self.data[i])
-            self.cluster_centers[j] = np.average(s)
+                if self.assigned_clusters[i][0] == j:
+                    for n in range(len(s)):
+                        s[n] += self.data[i][n]
+                        c += 1
+                    #np.sum(s,self.data[i], axis=0)
+            #self.cluster_centers[j] = np.mean(s, axis=0)
+            for n in range(len(self.cluster_centers[j])):
+                for m in range(len(s)):
+                    self.cluster_centers
+                #self.cluster_centers[j] = np.divide(s,c)
         self.assign_cluster()
+        self.calc_euclidean_distances()
+
+
+
+    '''
+    # function to update assigned clusters
+    def assign_cluster(self):
+        for i in range(len(self.data)):
+            cluster = self.dist_from_centers[i].index(min(self.dist_from_centers[i]))
+            self.assigned_clusters[i] = [cluster, self.cluster_centers[cluster]]
+    '''
 
 
 # main
 # initializing the model (handles : data pre-processing and initial assignment of clusters)
+'''
+model = K_means()
+for i in range(len(model.data)):
+    print (model.assigned_clusters[i])
+model.update_center()
+print((model.iteration, model.number_of_changes, model.cluster_centers))
+
+'''
+
 model = K_means(argv[1], argv[2])
-for i in range(49):
-    print (model.data[i])
-    print (model.dist_from_centers[i])
-    print(model.assigned_clusters[i][0])
+print((model.iteration, model.number_of_changes, model.cluster_centers))
+print('iteration changes cluster centers')
+
+for i in range(model.MAX_ITERATIONS):
+    #if (model.number_of_changes > 0):
+    model.update_center()
+    print((model.iteration, model.number_of_changes, model.cluster_centers))
+
+'''while ((model.iteration < model.MAX_ITERATIONS) and (model.number_of_changes > 0)):
+    print ('enter')
+    model.update_center()
+    print((model.iteration, model.number_of_changes, model.cluster_centers))
+'''
+
+
+
+
+
 
 
