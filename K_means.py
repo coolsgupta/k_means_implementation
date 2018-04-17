@@ -119,13 +119,13 @@ print((model.iteration, model.number_of_changes, model.cluster_centers))
 
 model = K_means(argv[1], argv[2])
 
-print((model.iteration, model.number_of_changes, model.cluster_centers))
+print((model.iteration, model.cluster_centers))
 
 
 for i in range(model.MAX_ITERATIONS):
     #if (model.number_of_changes > 0):
     model.update_center()
-    print((model.iteration, model.number_of_changes, model.cluster_centers))
+    print((model.iteration, model.cluster_centers))
 
 f= open("output.txt","w+")
 for i in range(len(model.cluster_centers)):
