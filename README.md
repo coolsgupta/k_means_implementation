@@ -10,3 +10,6 @@ Contains implementation of the k-means clustering algorithm in python.
 
 ## Run:
 python K_means.py points.txt(input file) k(The number of custer centers required)
+
+eg :
+python K_means.py points.txt 3
