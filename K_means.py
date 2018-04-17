@@ -7,14 +7,21 @@ import matplotlib.pyplot as plt
 #preprocessing step
 class K_means:
     def __init__(self,file_name = 'points_3.txt', K = 2):
+        # a list of provided data points
         self.data = []
+        # a list of assigned clusters
         self.assigned_clusters = []
+        # a list of distances of points from each cluster center
         self.dist_from_centers = []
+        # a list of the cluster centers
         self.cluster_centers  = []
+        # the name of the input file
         self.filename = file_name
+        # the number of clusters required
         self.K = K
         self.preprocess_data()
 
+    # function for pre-processing the data for the model
     def preprocess_data(self):
         # creating a list of available data points
         with open(self.filename) as f:
@@ -25,12 +32,14 @@ class K_means:
                 self.data.append(item)
         shuffle(self.data)
 
+    # function for calculating euclidean distance for a pair of data point and a cluster center
     def euclidean_distance(self, data_point, cluster_center):
         sum_of_squared_differences = 0
         for i in range(len(data_point)):
             sum_of_squared_differences += math.pow((data_point[i] - cluster_center[i]),2)
         return math.sqrt(sum_of_squared_differences)
 
+    # function to calulate the euclidean distance of each data point from each cluster center
     def calc_euclidean_distances(self):
         for i in range(len(self.data)):
             dist = []
@@ -38,31 +47,38 @@ class K_means:
                 dist.append(self.euclidean_distance(self.data[i], self.cluster_centers[j]))
             self.dist_from_centers.append(dist)
 
+    # function to assign clusters to the data points
     def assign_cluster(self):
         for i in range(len(self.data)):
             cluster = self.dist_from_centers[i].index(min(self.dist_from_centers[i]))
             self.assigned_clusters.append([cluster, self.cluster_centers[cluster]])
+        self.calc_euclidean_distances()
 
-
-
+    # function to find initial cluster centers
     def initial_centers(self):
         for i in range(self.K):
             self.cluster_centers.append(choice(self.data))
 
+    # function to update the position of cluster center once
     def update_center(self):
-        x
+        for j in range(self.K):
+            s =[0]*len(self.data[0])
+            for i in range(len(self.data)):
+                if self.assigned_clusters[i] == j:
+                    np.sum(s,self.data[i])
+            self.cluster_centers[j] = np.average(s)
+        self.assign_cluster()
 
 
 # main
 
-x = K_means()
-x.preprocess_data()
-x.initial_centers()
-x.calc_euclidean_distances()
-x.assign_cluster()
+model = K_means()
+model.initial_centers()
+model.calc_euclidean_distances()
+model.assign_cluster()
 for i in range(49):
-    print (x.data[i])
-    print (x.dist_from_centers[i])
-    print(x.assigned_clusters[i][0])
+    print (model.data[i])
+    print (model.dist_from_centers[i])
+    print(model.assigned_clusters[i][0])
 
 
