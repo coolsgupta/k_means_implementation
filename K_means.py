@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 #preprocessing step
 class K_means:
-    def __init__(self,file_name = 'points_3.txt', K = 2):
+    def __init__(self,file_name = 'points.txt', K = 2):
         # a list of provided data points
         self.data = []
         # a list of assigned clusters
@@ -24,7 +24,7 @@ class K_means:
         # number of iterations
         self.iteration = 0
         # maximum number of permitted iterations to avoid infinite loop
-        self.MAX_ITERATIONS = 5
+        self.MAX_ITERATIONS = 10
         # calling pre-process
         self.preprocess_data()
         # initiating cluster centers
@@ -89,12 +89,9 @@ class K_means:
                     for n in range(len(s)):
                         s[n] += self.data[i][n]
                         c += 1
-                    #np.sum(s,self.data[i], axis=0)
-            #self.cluster_centers[j] = np.mean(s, axis=0)
             for n in range(len(self.cluster_centers[j])):
-                for m in range(len(s)):
-                    self.cluster_centers
-                #self.cluster_centers[j] = np.divide(s,c)
+                if c > 0:
+                    self.cluster_centers[j][n] = s[n] / c
         self.assign_cluster()
         self.calc_euclidean_distances()
 
@@ -121,19 +118,23 @@ print((model.iteration, model.number_of_changes, model.cluster_centers))
 '''
 
 model = K_means(argv[1], argv[2])
+
 print((model.iteration, model.number_of_changes, model.cluster_centers))
-print('iteration changes cluster centers')
+
 
 for i in range(model.MAX_ITERATIONS):
     #if (model.number_of_changes > 0):
     model.update_center()
     print((model.iteration, model.number_of_changes, model.cluster_centers))
 
-'''while ((model.iteration < model.MAX_ITERATIONS) and (model.number_of_changes > 0)):
-    print ('enter')
-    model.update_center()
-    print((model.iteration, model.number_of_changes, model.cluster_centers))
-'''
+f= open("output.txt","w+")
+for i in range(len(model.cluster_centers)):
+    for j in range(len(model.cluster_centers[i])):
+        # writing the final values for cluster centers rounded off to 9 decimal places
+        f.write(''.join(str(round(model.cluster_centers[i][j], 9))))
+        f.write(' ')
+    f.write('\n')
+    #f.write(''.join(str(x) for x in model.cluster_centers[i]))
 
 
 
